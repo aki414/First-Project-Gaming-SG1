@@ -74,3 +74,34 @@ exports.getUserById = async (req, res) => {
     });
   }
 };
+
+exports.signUp = async (req, res) => {
+  try {
+
+    const user = await User.create({ ...req.body,role:"user" });
+    res.status(201).json({
+      message: "User created !!!!",
+      data: { user },
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Fail !!!!",
+      error: error,
+    });
+  }
+};
+exports.login = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user || user.password !== req.body.password) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      message: "Fail !!!!",
+      error: error,
+    }); 
+  } 
+};
